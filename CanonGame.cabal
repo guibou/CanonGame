@@ -17,4 +17,6 @@ executable CanonGame
   main-is:             Main.hs
   build-depends:       base >=4.12 && <4.13
                      , gloss
+                     , gloss-juicy
+                     , random
   default-language:    Haskell2010
