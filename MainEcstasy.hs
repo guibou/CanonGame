@@ -177,19 +177,19 @@ handleEvent (EventKey (SpecialKey KeyDown) Up _ _) =
         { angularVelocity = Set 0
           }
 handleEvent (EventKey (SpecialKey KeySpace) Down _ _) = do
-  e <-
+  mapM_ createEntity =<< do
     efor allEnts $ do
       query player
       tp <- query position
       a <- query angle
       let (p, s) = newProjectile tp a
-      pure $ newEntity
-        { bullet = Just (),
-          position = Just p,
-          velocity = Just s,
-          gravity = Just ()
-          }
-  mapM_ createEntity e
+      pure
+        $ newEntity
+          { bullet = Just (),
+            position = Just p,
+            velocity = Just s,
+            gravity = Just ()
+            }
 handleEvent _ = pure ()
 
 -- Step
@@ -237,6 +237,8 @@ handleStep dt = do
         { age = Set (t + dt)
           }
   -- Handle collisions
+
+  -- Query all the enemies
   en <-
     efor allEnts $ do
       query enemy
@@ -244,12 +246,14 @@ handleStep dt = do
       velEnemy <- query velocity
       e <- queryEnt
       pure (posEnemy, velEnemy, e)
+  -- Query all the bullets
   bul <-
     efor allEnts $ do
       query bullet
       posBullet <- query position
       e <- queryEnt
       pure (posBullet, e)
+  -- double loop on bullet / ennemy
   flip (mapM_) bul $ \(posBullet, bulletEntity) -> do
     flip (mapM_) en $ \(posEnemy, velEnemy@(vxe, vye), enemyEntity) -> do
       when ((distance2 posEnemy posBullet) < 500) $ do
@@ -282,25 +286,22 @@ handleStep dt = do
                 gravity = Just ()
                 }
   -- clean old bullets
-  oldBullets <-
+  mapM_ deleteEntity =<< do
     efor allEnts $ do
       query bullet
       (_, pY) <- query position
       guard $ pY < 0
       queryEnt
-  mapM_ deleteEntity oldBullets
   -- clean old planes
-  oldPlanes <-
+  mapM_ deleteEntity =<< do
     efor allEnts $ do
       query enemy
       (pX, _) <- query position
       guard $ (pX < -100 || pX > screenX + 100)
       queryEnt
-  mapM_ deleteEntity oldPlanes
   -- clean old explosions and particules
-  tooAged <-
+  mapM_ deleteEntity =<< do
     efor allEnts $ do
       a <- query age
       guard $ a > 5
       queryEnt
-  mapM_ deleteEntity tooAged

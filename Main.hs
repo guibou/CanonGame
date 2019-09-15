@@ -19,9 +19,7 @@ import Apecs
 import Apecs.Gloss
 import Control.Monad (replicateM_, void, when)
 import Data.Monoid (Sum (..))
-import Graphics.Gloss
 import Graphics.Gloss.Data.ViewPort
-import Graphics.Gloss.Interface.IO.Interact
 import Lib
 import System.Random
 
@@ -110,21 +108,21 @@ doDraw = do
 
 -- Events
 handleEvent (EventKey (SpecialKey KeyLeft) Down _ _) =
-  cmap (\(Player, Velocity (_, _)) -> Velocity (-100, 0))
+  cmap (\Player -> Velocity (-100, 0))
 handleEvent (EventKey (SpecialKey KeyRight) Down _ _) =
-  cmap (\(Player, Velocity (_, _)) -> Velocity (100, 0))
+  cmap (\Player -> Velocity (100, 0))
 handleEvent (EventKey (SpecialKey KeyLeft) Up _ _) =
-  cmap (\(Player, Velocity (_, _)) -> Velocity (0, 0))
+  cmap (\Player -> Velocity (0, 0))
 handleEvent (EventKey (SpecialKey KeyRight) Up _ _) =
-  cmap (\(Player, Velocity (_, _)) -> Velocity (0, 0))
+  cmap (\Player -> Velocity (0, 0))
 handleEvent (EventKey (SpecialKey KeyUp) Down _ _) =
-  cmap (\(Player, AngularVelocity _) -> AngularVelocity (-90))
+  cmap (\Player -> AngularVelocity (-90))
 handleEvent (EventKey (SpecialKey KeyDown) Down _ _) =
-  cmap (\(Player, AngularVelocity _) -> AngularVelocity 90)
+  cmap (\Player -> AngularVelocity 90)
 handleEvent (EventKey (SpecialKey KeyUp) Up _ _) =
-  cmap (\(Player, AngularVelocity _) -> AngularVelocity 0)
+  cmap (\Player -> AngularVelocity 0)
 handleEvent (EventKey (SpecialKey KeyDown) Up _ _) =
-  cmap (\(Player, AngularVelocity _) -> AngularVelocity 0)
+  cmap (\Player -> AngularVelocity 0)
 handleEvent (EventKey (SpecialKey KeySpace) Down _ _) = do
   cmapM_ $ \(Player, Position tp, Angle a) -> do
     let (p, s) = newProjectile tp a
