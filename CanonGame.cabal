@@ -13,12 +13,30 @@ maintainer:          guillaum.bouchard@gmail.com
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
 
-executable CanonGame
-  main-is:             Main.hs
+library
+  exposed-modules: Lib
   build-depends:       base >=4.12 && <4.13
                      , gloss
                      , gloss-juicy
                      , random
+  hs-source-dirs: src
+  default-language:    Haskell2010
+
+executable CanonGameApecs
+  main-is:             Main.hs
+  build-depends:       base >=4.12 && <4.13
+                     , CanonGame
+                     , random
                      , apecs
+                     , gloss
                      , apecs-gloss
+  default-language:    Haskell2010
+
+executable CanonGameEcstasy
+  main-is:             MainEcstasy.hs
+  build-depends:       base >=4.12 && <4.13
+                     , CanonGame
+                     , random
+                     , ecstasy
+                     , gloss
   default-language:    Haskell2010
