@@ -19,4 +19,6 @@ executable CanonGame
                      , gloss
                      , gloss-juicy
                      , random
+                     , apecs
+                     , apecs-gloss
   default-language:    Haskell2010
